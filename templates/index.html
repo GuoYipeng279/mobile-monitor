@@ -9,5 +9,26 @@
     <video id="recordedVideo" controls></video>
     <video id="liveVideo" controls></video>
     <script src="static/screen-recording.js"></script>
+    
+    <!-- Include Pusher JavaScript library -->
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+
+    <!-- Your client-side JavaScript code -->
+    <script>
+        // Initialize Pusher with your app credentials
+        const pusher = new Pusher('1670948', {
+            cluster: 'eu',
+        });
+    
+        // Subscribe to a Pusher channel and handle events
+        const channel = pusher.subscribe('my-channel'); // Replace with your channel name
+    
+        channel.bind('my-event', (data) => {
+            // Handle incoming messages or data here
+            console.log('Received data:', data);
+        });
+    
+        // Other client-side code and event handlers
+    </script>
 </body>
 </html>
