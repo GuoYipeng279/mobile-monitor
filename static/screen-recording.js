@@ -1,3 +1,5 @@
+console.log('JavaScript file loaded');
+
 const startButton = document.getElementById('startButton');
 const stopButton = document.getElementById('stopButton');
 const recordedVideo = document.getElementById('recordedVideo');
@@ -6,6 +8,7 @@ let mediaRecorder;
 let recordedChunks = [];
 
 startButton.addEventListener('click', async () => {
+    console.log('Button clicked'); // Add this line
     const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
 
     mediaRecorder = new MediaRecorder(stream);
