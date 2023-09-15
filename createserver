@@ -1,0 +1,23 @@
+sudo apt-get update
+sudo apt-get install nodejs npm
+mkdir my-server
+cd my-server
+npm init -y
+npm install express --save
+
+
+
+sudo apt-get update
+sudo apt-get install apache2
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo nano /etc/apache2/sites-available/guoyipeng279-domain.conf
+
+<VirtualHost *:80>
+    ServerName your-domain.com
+    ProxyPass / http://localhost:3000/
+    ProxyPassReverse / http://localhost:3000/
+</VirtualHost>
+
+sudo a2ensite guoyipeng279-domain.conf
+sudo systemctl restart apache2

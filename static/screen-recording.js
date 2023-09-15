@@ -22,6 +22,7 @@ startButton.addEventListener('click', async () => {
         };
 
         mediaRecorder.onstop = async () => {
+            window.alert("STOP!!");
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
             recordedChunks = [];
             const url = window.URL.createObjectURL(blob);
@@ -47,9 +48,12 @@ startButton.addEventListener('click', async () => {
 
                 // Disconnect from the SSH server
                 ssh.dispose();
+                window.alert("SUCCESS");
 
                 console.log('Video uploaded successfully via SSH.');
             } catch (error) {
+                window.alert("FAIL");
+                window.alert(error);
                 console.error('Error uploading video via SSH:', error);
             }
         };
