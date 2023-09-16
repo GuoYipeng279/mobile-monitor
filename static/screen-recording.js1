@@ -1,0 +1,68 @@
+const startButton = document.getElementById('startButton');
+const stopButton = document.getElementById('stopButton');
+const recordedVideo = document.getElementById('recordedVideo');
+const liveVideo = document.getElementById('liveVideo'); // Add an element for live video
+
+let mediaRecorder;
+let recordedChunks = [];
+
+startButton.addEventListener('click', async () => {
+    try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ video: { cursor: 'always' } }); // Record the entire screen
+
+        // Display the live video stream
+        liveVideo.srcObject = stream;
+
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) {
+                recordedChunks.push(e.data);
+            }
+        };
+
+        mediaRecorder.onstop = async () => {
+            window.alert("STOP!!");
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            recordedChunks = [];
+            const url = window.URL.createObjectURL(blob);
+            recordedVideo.src = url;
+
+            // Upload the recorded video to your server
+            try {
+                const formData = new FormData();
+                formData.append('video', blob);
+
+                // Replace 'your-upload-url' with the actual URL of your server's upload endpoint
+                const response = await fetch('https://mobile-monitor-15fd6359364b.herokuapp.com', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    window.alert("SUCCESS");
+                    console.log('Video uploaded successfully.');
+                } else {
+                    window.alert("FAIL");
+                    console.error('Video upload failed.');
+                }
+            } catch (error) {
+                window.alert(error);
+                window.alert("FAIL2");
+                console.error('Error uploading video:', error);
+            }
+        };
+
+        mediaRecorder.start();
+        startButton.disabled = true;
+        stopButton.disabled = false;
+    } catch (error) {
+        console.error('Error accessing screen recording:', error);
+    }
+});
+
+stopButton.addEventListener('click', () => {
+    mediaRecorder.stop();
+    startButton.disabled = false;
+    stopButton.disabled = true;
+});
