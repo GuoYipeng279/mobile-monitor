@@ -11,7 +11,7 @@ sudo apt-get update
 sudo apt-get install apache2
 sudo a2enmod proxy
 sudo a2enmod proxy_http
-sudo nano /etc/apache2/sites-available/guoyipeng279-domain.conf
+sudo nano /etc/apache2/sites-available/mobile-monitor-15fd6359364b.herokuapp.conf
 
 <VirtualHost *:80>
     ServerName your-domain.com
@@ -21,3 +21,22 @@ sudo nano /etc/apache2/sites-available/guoyipeng279-domain.conf
 
 sudo a2ensite guoyipeng279-domain.conf
 sudo systemctl restart apache2
+
+
+<VirtualHost *:80>
+    ServerName mobile-monitor-15fd6359364b.herokuapp.com
+    DocumentRoot monitors
+    ProxyPass / http://localhost:3000/
+    ProxyPassReverse / http://localhost:3000/
+    # Allow file uploads
+    <Directory monitors>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+        Require all granted
+    </Directory>
+
+</VirtualHost>
+
+curl -X POST http://mobile-monitor-15fd6359364b.herokuapp.com

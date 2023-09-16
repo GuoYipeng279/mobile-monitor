@@ -1,10 +1,10 @@
-FROM node:14
+FROM python:3
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN npm install
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "node", "./your-node-app.js" ]
+CMD [ "python", "./app.py" ]
